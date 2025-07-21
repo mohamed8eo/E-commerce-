@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import ImageUpload from "@/components/ImageUpload";
+import ImageUpload from "@/components/admin/ImageUpload";
 import { Loader2Icon } from "lucide-react"
 
 
@@ -59,7 +59,7 @@ const CreatePost = () => {
             Fill in the details below to create a new product listing.
           </p>
         </div>
-        <div className="flex-1 flex flex-col w-auto md:w-[700px]  xl:w-[1050px]">
+        <div className="flex-1 flex flex-col w-auto md:w-[700px]  xl:w-[1050px] mb-[50px] md:mb-0">
           <form onSubmit={(e) => {
             e.preventDefault();
             handleSubmit();
@@ -92,12 +92,18 @@ const CreatePost = () => {
                 <Label htmlFor="price">Price</Label>
                 <Input
                   id="price"
-                  type="number"
-                  min="0"
-                  step="0.01"
+                  type="text"
+                  inputMode="decimal"
+                  pattern="^[0-9]*\.?[0-9]*$"
                   placeholder="0.00"
-                  value={productPrice}
-                  onChange={(e) => setProductPrice(Number(e.target.value))}
+                  value={productPrice === 0 ? '' : productPrice}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    // Allow only numbers and decimals
+                    if (/^\d*\.?\d*$/.test(value)) {
+                      setProductPrice(value === '' ? 0 : Number(value));
+                    }
+                  }}
                   required
                 />
               </div>
@@ -106,12 +112,18 @@ const CreatePost = () => {
                 <Label htmlFor="stock">Stock</Label>
                 <Input
                   id="stock"
-                  type="number"
-                  min="0"
-                  step="1"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="^[0-9]*$"
                   placeholder="0"
-                  value={productStock}
-                  onChange={(e) => setProductStock(Number(e.target.value))}
+                  value={productStock === 0 ? '' : productStock}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    // Allow only integers
+                    if (/^\d*$/.test(value)) {
+                      setProductStock(value === '' ? 0 : Number(value));
+                    }
+                  }}
                   required
                 />
               </div>

@@ -48,7 +48,7 @@ export async function POST(req: Request) {
 
 
   if(evt.type === 'user.created') {
-    const { id, email_addresses, first_name, image_url } = evt.data
+    const { id, email_addresses, first_name, image_url, username } = evt.data;
     try {
       const newUser = await prisma.user.create({
         data: {
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
           email: email_addresses[0].email_address,
           name: first_name,
           image: image_url,
-          username: email_addresses[0].email_address.split('@')[0], // Use email prefix as username
+          username: username || email_addresses[0].email_address.split('@')[0],
         }
       });
       return new Response(JSON.stringify(newUser), {

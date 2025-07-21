@@ -1,7 +1,7 @@
 "use client";
 
 import { getAdminProductById, editAdminProduct } from '@/action/admin.action';
-import { redirect, useParams } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useEffect } from 'react';
 import  { useState } from 'react'
 import { toast } from 'sonner';
@@ -9,10 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import ImageUpload from "@/components/ImageUpload";
+import ImageUpload from "@/components/admin/ImageUpload";
 import { Loader2Icon } from "lucide-react"
 
 const EditProduct = () => {
+  const router = useRouter();
   const { productId } = useParams();
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
@@ -41,13 +42,13 @@ const EditProduct = () => {
       } catch (error) {
         console.log(error)
         toast.error("Failed to load product data");
-        redirect('/vendor/dashboard/products');
+        router.push('/vendor/dashboard/products');
       } finally {
         setLoading(false);
       }
     }
     if (productId) fetchProduct();
-  }, [productId]);
+  }, [productId, router]);
 
   const handleUpdate = async () => {
     if(!productDescription.trim() || !productName.trim() || !productImages.length || !productPrice || !productStock) {
@@ -67,7 +68,9 @@ const EditProduct = () => {
       });
       if(res.success) {
         toast.success("Product updated successfully!");
+        router.push('/vendor/dashboard/products');
       }
+
     } catch (error) {
       console.error("Error updating product:", error);
       toast.error("Failed to update product. Please try again.");
@@ -75,7 +78,6 @@ const EditProduct = () => {
       setIsUpdating(false);
     }
   }
-
   if (loading) return <div>Loading...</div>;
 
   return (

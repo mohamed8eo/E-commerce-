@@ -1,6 +1,7 @@
 "use server";
 import prisma from "@/lib/prisma";
 import { getDbUserId } from "./user.action";
+import redis from "@/lib/redis";
 
 export async function postAdminProduct(data: {
   name: string;
@@ -48,6 +49,8 @@ export async function postAdminProduct(data: {
         }
       }
     });
+    // Invalidate cache for this user
+    await redis.del(`admin_products_${userId}`);
     return { success: true, product };
   } catch (error) {
     console.error("Error creating product:", error);
@@ -61,7 +64,12 @@ export async function getAdminProducts() {
   try {
     const userId = await getDbUserId();
     if (!userId) throw new Error("User not found");
-
+    // Try cache first
+    const cacheKey = `admin_products_${userId}`;
+    const cached = await redis.get(cacheKey);
+    if (cached) {
+      return { success: true, products: JSON.parse(cached) };
+    }
     const products = await prisma.product.findMany({
       where: { ownerId: userId },
       select: {
@@ -97,7 +105,8 @@ export async function getAdminProducts() {
       mainImage: product.images[0]?.url || "", 
       tags: product.tags.map(t => t.tag.name)
     }));
-
+    // Cache result
+    await redis.set(cacheKey, JSON.stringify(transformedProducts), { EX: 300 }); // 5 min
     return { success: true, products: transformedProducts };
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -109,7 +118,6 @@ export async function deleteAdminProduct(productId: string) {
   try {
     const userId = await getDbUserId();
     if (!userId) throw new Error("User not found");
-
     // First, verify the product exists and belongs to the user
     const existingProduct = await prisma.product.findFirst({
       where: {
@@ -117,31 +125,27 @@ export async function deleteAdminProduct(productId: string) {
         ownerId: userId,
       },
     });
-
     if (!existingProduct) {
       throw new Error("Product not found or unauthorized");
     }
-
     // Delete everything in a transaction to ensure data consistency
     const result = await prisma.$transaction(async (tx) => {
       // 1. Delete all product images
       await tx.productImage.deleteMany({
         where: { productId }
       });
-
       // 2. Delete all product tags
       await tx.productTag.deleteMany({
         where: { productId }
       });
-
       // 3. Finally delete the product itself
       const deletedProduct = await tx.product.delete({
         where: { id: productId }
       });
-
       return deletedProduct;
     });
-
+    // Invalidate cache for this user
+    await redis.del(`admin_products_${userId}`);
     return { success: true, product: result };
   } catch (error) {
     console.error("Error deleting product:", error);
@@ -162,7 +166,6 @@ export async function editAdminProduct(productId: string, data: {
   try {
     const userId = await getDbUserId();
     if (!userId) throw new Error("User not found");
-
     // Verify the product exists and belongs to the user
     const existingProduct = await prisma.product.findFirst({
       where: {
@@ -170,11 +173,9 @@ export async function editAdminProduct(productId: string, data: {
         ownerId: userId,
       },
     });
-
     if (!existingProduct) {
       throw new Error("Product not found or unauthorized");
     }
-
     // Update the product
     const updatedProduct = await prisma.product.update({
       where: { id: productId },
@@ -210,7 +211,8 @@ export async function editAdminProduct(productId: string, data: {
         }
       }
     });
-
+    // Invalidate cache for this user
+    await redis.del(`admin_products_${userId}`);
     return { success: true, product: updatedProduct };
   } catch (error) {
     console.error("Error updating product:", error);

@@ -1,18 +1,16 @@
-import TopNav from "@/components/TopNav";
 import { ReactNode } from "react";
-
-
+import Navbar from "@/components/Navbar";
+import TopNav from "@/components/TopNav";
+import Footer from "@/components/Footer";
 const Layout = async ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-    <div className="flex items-center justify-center bg-black">
-      <nav className="relative w-full max-w-4xl">
-        <TopNav/>
-      </nav>
-      </div>
       <div>
-      {children}
+        <TopNav/>
+        <Navbar />
+        {children}
+        <Footer/>
       </div>
     </>
   );

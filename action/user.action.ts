@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import redis from "@/lib/redis";
 import { auth, currentUser } from "@clerk/nextjs/server";
 
 export async function getUserByClerkId(clerkId:string) {
@@ -43,57 +44,28 @@ export async function getDbUserId() {
 
   return user!.id;
 }
-// i need to create an function that create a product on the datebase
-// export async function postAdminProduct(data: {
-//   name: string;
-//   description: string;
-//   price: number;
-//   stock: number;
-//   tags: string[];
-//   images: string[];
-// }) {
-//   try {
-//     const { name, description, price, stock, tags, images } = data;
-//     const userId = await getDbUserId();
 
-//     if (!userId) throw new Error("User not found");
-
-//     return prisma.product.create({
-//       data: {
-//         name,
-//         description,
-//         price,
-//         stock,
-//         tags: {
-//           create: tags.map(tag => ({
-//             tag: {
-//               connectOrCreate: {
-//                 where: { name: tag },
-//                 create: { name: tag }
-//               }
-//             }
-//           })),
-//         },
-//         images: {
-//           createMany: {
-//             data: images.map(url => ({ url })),
-//           },
-//         },
-//         ownerId: userId, // Use the database user ID instead of Clerk ID
-//       },
-//       include: {
-//         images: true,
-//         tags: {
-//           include: {
-//             tag: true
-//           }
-//         }
-//       }
-//     });
-//   } catch (error) {
-//     console.error("Error creating product:", error);
-//     throw new Error("Failed to create product");
-    
-//   }
-  
-// }
+// Fetch user info from DB by Clerk userId (for fast sidebar rendering, with Redis cache)
+export async function getUserInfoFromDb(clerkId: string) {
+  const cacheKey = `user:${clerkId}`;
+  const cached = await redis.get(cacheKey);
+  if (cached) {
+    console.log('Sidebar: Redis cache hit');
+    return JSON.parse(cached);
+  }
+  console.log('Sidebar: Redis cache miss, fetching from DB');
+  const userInfo = await prisma.user.findUnique({
+    where: { clerkId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      image: true,
+      username: true,
+    },
+  });
+  if (userInfo) {
+    await redis.set(cacheKey, JSON.stringify(userInfo), { EX: 3600 }); // cache for 1 hour
+  }
+  return userInfo;
+}

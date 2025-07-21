@@ -9,16 +9,16 @@ export function DashboardChart({ salesData }: { salesData?: Record<string, numbe
     : []
 
   return (
-    <Card className="bg-[#18181b] rounded-2xl border border-[#232329] shadow-sm p-6">
+    <Card className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
       <div className="mb-6">
-        <div className="text-lg font-medium text-white">Sales Over Time</div>
-        <div className="text-4xl font-bold text-white mt-2">
+        <div className="text-lg font-medium text-black">Sales Over Time</div>
+        <div className="text-4xl font-bold text-black mt-2">
           {salesData ? `$${data.reduce((sum, d) => sum + d.sales, 0).toLocaleString()}` : '...'}
         </div>
         <div className="text-sm mt-1">
-          <span className="text-gray-400">Last 12 Months </span>
+          <span className="text-gray-600">Last 12 Months </span>
           {/* You can add a real percentage if you calculate it */}
-          <span className="text-green-500 font-semibold">+15%</span>
+          <span className="text-green-600 font-semibold">+15%</span>
         </div>
       </div>
       <ResponsiveContainer width="100%" height={220}>
