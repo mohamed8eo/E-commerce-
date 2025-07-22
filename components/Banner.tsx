@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useMemo, useState, useEffect } from "react";
 
 
 const banners = [
@@ -91,8 +91,8 @@ export default Banner;
 // ... existing code ...
 const MusicExperienceSection = () => {
   // Set the end time for the countdown (e.g., 5 days from now)
-  const END_TIME = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000 + 23 * 60 * 60 * 1000 + 59 * 60 * 1000 + 35 * 1000);
-  const getTimeLeft = () => {
+  const END_TIME = useMemo(() => new Date(Date.now() + 5 * 24 * 60 * 60 * 1000 + 23 * 60 * 60 * 1000 + 59 * 60 * 1000 + 35 * 1000), []);
+  const getTimeLeft = useCallback(() => {
     const now = new Date();
     const diff = END_TIME.getTime() - now.getTime();
     if (diff <= 0) return { hours: 0, days: 0, minutes: 0, seconds: 0 };
@@ -101,14 +101,14 @@ const MusicExperienceSection = () => {
     const minutes = Math.floor((diff / (1000 * 60)) % 60);
     const seconds = Math.floor((diff / 1000) % 60);
     return { hours, days, minutes, seconds };
-  };
+  }, [END_TIME]);
   const [timer, setTimer] = useState(getTimeLeft());
   useEffect(() => {
     const interval = setInterval(() => {
       setTimer(getTimeLeft());
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [getTimeLeft]);
   return (
     <section className="w-full flex justify-center items-center py-12">
       <div className="w-full max-w-6xl bg-black rounded-2xl flex flex-col md:flex-row items-center overflow-hidden shadow-xl relative">
@@ -145,7 +145,7 @@ const MusicExperienceSection = () => {
           <div className="absolute inset-0 flex justify-center items-center z-0">
             <div className="w-80 h-80 md:w-[420px] md:h-[420px] rounded-full bg-gradient-to-br from-gray-700/60 to-black blur-2xl"></div>
           </div>
-          <img src="/JBL_BOOMBOX_2_HERO_020_x1 (1) 1.png" alt="JBL Boombox" className="max-w-xs md:max-w-md w-full h-auto object-contain relative z-10" />
+          <Image src="/JBL_BOOMBOX_2_HERO_020_x1 (1) 1.png" alt="JBL Boombox" width={400} height={300} className="max-w-xs md:max-w-md w-full h-auto object-contain relative z-10" />
         </div>
       </div>
     </section>

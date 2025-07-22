@@ -119,7 +119,7 @@ const FlashSales = () => {
             {products.map((product, idx) => {
               const quantity = getItemQuantity(product.id);
               return (
-                <Link href={`/shop/product/${product.id}`} key={product.id}>
+                <Link href={`/shop/product/${product.id}`} key={idx}>
                   <div key={product.id} className="bg-gray-50 rounded-lg p-6 w-[300px] h-[420px] flex flex-col justify-between items-center flex-shrink-0 relative group">
                     {/* Discount badge */}
                     {product.discount && product.discount > 0 ? (

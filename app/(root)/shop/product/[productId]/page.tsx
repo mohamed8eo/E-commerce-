@@ -12,9 +12,10 @@ type Product = {
   // ...other fields
 };
 
-export default async function ProductPage({ params }: { params: { productId: string } }) {
+export default async function ProductPage({ params }: { params: Promise<{ productId: string }> }) {
+  const { productId } = await params;
   const products = await GetAllProductFromDbImages();
-  const product = products.find((p: Product) => p.id === params.productId);
+  const product = products.find((p: Product) => p.id === productId);
   if (!product) return <div>Product not found</div>;
   // For demo, use product.images or fallback to [product.image]
   const images = product.images?.length ? product.images.map((img: { url: string }) => img.url) : [product.image];

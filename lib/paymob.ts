@@ -1,5 +1,4 @@
 const PAYMOB_API_KEY = process.env.PAYMOB_API_KEY!;
-const PAYMOB_INTEGRATION_ID = process.env.PAYMOB_INTEGRATION_ID!;
 
 export async function getPaymobToken() {
   const res = await fetch("https://accept.paymob.com/api/auth/tokens", {

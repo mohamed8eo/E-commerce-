@@ -10,6 +10,7 @@ import {
   TableHead,
   TableCell,
 } from "@/components/ui/table"
+import Image from 'next/image';
 
 const CartPage = () => {
   const { cart, removeFromCart, updateQuantity } = useCart();
@@ -79,7 +80,7 @@ const CartPage = () => {
                       ✖
                     </button>
                     {item.image && (
-                      <img src={item.image} alt={item.name} width={60} height={60} className="object-contain rounded" />
+                      <Image src={item.image || '/placeholder.png'} alt={item.name} width={60} height={60} className="object-contain rounded" />
                     )}
                     <span className="font-medium text-black ml-2">{item.name}</span>
                   </TableCell>

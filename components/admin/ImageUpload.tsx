@@ -2,6 +2,7 @@
 
 import { UploadDropzone } from "@/lib/uploadthing";
 import { XIcon } from "lucide-react";
+import Image from 'next/image';
 
 interface ImageUploadProps {
   onChange: (urls: string[]) => void;
@@ -14,7 +15,7 @@ function ImageUpload({ endpoint, onChange, value }: ImageUploadProps) {
     <div className="flex flex-wrap gap-4">
       {value && value.length > 0 && value.map((url, idx) => (
         <div key={url} className="relative size-40">
-          <img src={url} alt={`Upload ${idx + 1}`} className="rounded-md size-40 object-cover" />
+          <Image src={url} alt={`Upload ${idx + 1}`} width={160} height={160} className="rounded-md size-40 object-cover" />
           <button
             onClick={() => onChange(value.filter((_, i) => i !== idx))}
             className="absolute top-0 right-0 p-1 bg-red-500 rounded-full shadow-sm"

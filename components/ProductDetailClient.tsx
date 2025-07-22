@@ -1,12 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "./CartContext";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { useWishlist } from "@/components/WishlistContext";
-import { toast } from "sonner";
 
 type Product = {
   id: string;

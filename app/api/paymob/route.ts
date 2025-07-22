@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPaymobToken, registerOrder, getPaymentKey } from "@/lib/paymob";
 
+type CartItem = { name: string; price: number; quantity: number };
+
 export async function POST(req: NextRequest) {
   const { cart, billingData } = await req.json();
-  const amountCents = cart.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0) * 100;
+  const amountCents = cart.reduce((sum: number, item: CartItem) => sum + item.price * item.quantity, 0) * 100;
 
   const token = await getPaymobToken();
-  const orderId = await registerOrder(token, amountCents, cart.map((item: any) => ({
+  const orderId = await registerOrder(token, amountCents, cart.map((item: CartItem) => ({
     name: item.name,
     amount_cents: item.price * 100,
     quantity: item.quantity,

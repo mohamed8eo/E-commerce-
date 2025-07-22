@@ -15,10 +15,25 @@ interface Product {
   rating: number;
 }
 
-export default async function CategoryPage({ params }: { params: { category: string } }) {
-  const { category } = params;
+type CategoryPageProps = {
+  params: Promise<{
+    category: string;
+  }>;
+};
+
+export async function generateStaticParams() {
+  // TODO: Replace with actual categories from your DB if possible
+  return [
+    { category: 'electronics' },
+    { category: 'fashion' },
+    { category: 'sports' },
+    { category: 'home' },
+  ];
+}
+
+export default async function Page({ params }: CategoryPageProps) {
+  const { category } = await params;
   const products: Product[] = await GetAllProductFromDb();
-  // Filter products by tag (case-insensitive)
   const filtered = products.filter((product) =>
     product.tags.some((tag) => tag.toLowerCase() === category.toLowerCase())
   );

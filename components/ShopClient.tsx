@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCart } from "./CartContext";
 import { addProductToWishlist, removeProductFromWishlist, isProductInWishlist } from "@/action/wishlist.action";
 import { toast } from "sonner";
+import Image from 'next/image';
 
 type Product = {
   id: string;
@@ -64,7 +65,7 @@ export default function ShopClient({ products, allTags }: { products: Product[];
               <div key={product.id} className="bg-white rounded-xl shadow p-4 flex flex-col items-center hover:shadow-lg transition group">
                 <Link href={`/shop/product/${product.id}`} className="w-full flex-1 flex flex-col items-center">
                   {product.image ? (
-                    <img src={product.image} alt={product.name} className="w-32 h-32 object-contain mb-4 rounded group-hover:scale-105 transition" />
+                    <Image src={product.image || '/placeholder.png'} alt={product.name} width={128} height={128} className="w-32 h-32 object-contain mb-4 rounded group-hover:scale-105 transition" />
                   ) : (
                     <div className="w-32 h-32 flex items-center justify-center bg-gray-100 text-gray-400 mb-4 rounded">No Image</div>
                   )}

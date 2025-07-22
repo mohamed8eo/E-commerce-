@@ -18,7 +18,7 @@ export default function SuccessPage() {
       router.push("/");
     }, 2500);
     return () => clearTimeout(timeout);
-  }, []);
+  }, [refreshCart, router]);
 
   if (!show) return null;
 

@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { addProductToWishlist, removeProductFromWishlist, getWishlistProducts, isProductInWishlist } from "@/action/wishlist.action";
+import { addProductToWishlist, removeProductFromWishlist, getWishlistProducts } from "@/action/wishlist.action";
 import { toast } from "sonner";
 
 export type WishlistProduct = {

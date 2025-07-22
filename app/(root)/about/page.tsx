@@ -1,14 +1,6 @@
 import Link from "next/link"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-
 import Image from 'next/image'
+import BreadcrumbWithCustomSeparator from '@/components/BreadcrumbWithCustomSeparator';
 
 type Card = {
   img: string;
@@ -117,26 +109,6 @@ const services: Service[] = [
   },
 ];
 
-export function BreadcrumbWithCustomSeparator() {
-  return (
-    <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href="/">Home</Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <BreadcrumbPage>About</BreadcrumbPage>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </Breadcrumb>
-  )
-}
-
 
 const page = () => {
   return (
@@ -152,7 +124,7 @@ const page = () => {
         gap-8 lg:gap-16 lg:pr-0
       ">
         {/* image */}
-        <img
+        <Image
           src="/About.png"
           alt="About Section"
           className="w-full max-w-[350px] sm:max-w-[500px] lg:max-w-[705px] h-auto"

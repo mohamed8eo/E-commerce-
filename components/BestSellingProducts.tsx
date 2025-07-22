@@ -89,7 +89,7 @@ const BestSellingProducts = () => {
       <div className="relative">
         <div className="w-[1248px] overflow-hidden mx-auto">
           <div className="flex gap-6 min-w-fit" style={{ transform: `translateX(-${scroll * SCROLL_AMOUNT}px)`, transition: 'transform 0.5s' }}>
-            {products.map((product, idx) => {
+            {products.map((product) => {
               const quantity = getItemQuantity(product.id);
               return (
                 <Link href={`/shop/product/${product.id}`} key={product.id}> 

@@ -40,7 +40,7 @@ const ExploreProductsSection = () => {
         if (Array.isArray(res)) {
           setProducts(res.slice(0, MAX_PRODUCTS));
         }
-      } catch (error) {
+      } catch {
         setProducts([]);
       }
     };
@@ -93,7 +93,7 @@ const ExploreProductsSection = () => {
         {/* Product Grid with Arrows */}
         <div className="relative flex items-center justify-center">
           <div className="grid grid-cols-4 grid-rows-2 gap-8 w-full max-w-7xl mx-auto">
-            {visibleProducts.map((product, idx) => {
+            {visibleProducts.map((product) => {
               const quantity = getItemQuantity(product.id);
               return (
                 <Link href={`/shop/product/${product.id}`} key={product.id}> 
