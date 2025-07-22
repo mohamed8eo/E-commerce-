@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
+import { CartProvider } from "../components/CartContext";
+import { WishlistProvider } from "@/components/WishlistContext";
 
 
 const Inte_rfont = Inter({
@@ -31,8 +33,12 @@ export default function RootLayout({
         <body
           className={`${Inte_rfont.className}  antialiased`}
         >
-      <main className="flex-1">{children}</main>
-      <Toaster />
+      <WishlistProvider>
+        <CartProvider>
+        <main className="flex-1">{children}</main>
+        <Toaster />
+      </CartProvider>
+    </WishlistProvider>
     </body>
   </html>
 </ClerkProvider>

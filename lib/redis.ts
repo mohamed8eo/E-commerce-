@@ -1,20 +1,15 @@
 // lib/redis.ts
-import { createClient } from 'redis';
+import { createClient } from "redis";
 
-if (!process.env.REDIS_URL) {
-  throw new Error('REDIS_URL is not set');
+declare global {
+  // eslint-disable-next-line no-var
+  var redis: ReturnType<typeof createClient> | undefined;
 }
 
-const redis = createClient({
-  url: process.env.REDIS_URL,
-});
-
-redis.on('error', (err: unknown) => console.error('Redis Client Error', err));
-
-(async () => {
-  if (!redis.isOpen) {
-    await redis.connect();
+const redis = globalThis.redis ?? createClient({ url: process.env.REDIS_URL });
+if (!globalThis.redis) {
+  redis.connect();
+  globalThis.redis = redis;
   }
-})();
 
 export default redis;

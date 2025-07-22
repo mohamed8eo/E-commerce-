@@ -1,6 +1,6 @@
 "use client"
 
-import { redirect, usePathname,  } from 'next/navigation'
+import { redirect, usePathname } from 'next/navigation'
 import { Input } from "@/components/ui/input";
 import { ShoppingCart, Search, Menu } from "lucide-react";
 import Link from 'next/link';
@@ -13,15 +13,21 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/s
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-
-
+import { useCart } from "./CartContext";
+import { useRouter } from "next/navigation";
+import { HeartIcon } from 'lucide-react';
+import { useWishlist } from "@/components/WishlistContext";
 
 const RightNavbar = () => {
   const { user } = useUser();
   const [isVendor, setIsVendor] = useState(false);
   const [language, setLanguage] = useState("English");
   const pathname = usePathname(); 
-  
+  const { cart } = useCart();
+  const [search, setSearch] = useState("");
+  const router = useRouter();
+  const { count: wishlistCount } = useWishlist();
+
   useEffect(() => {
   if (user?.publicMetadata?.role === 'vendor') {
     setIsVendor(true);
@@ -49,19 +55,47 @@ const RightNavbar = () => {
   { name: "About", path: "/about" },
   { name: "Contact", path: "/contact" },
   ];
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (search.trim()) {
+      router.push(`/search?tag=${encodeURIComponent(search)}`);
+    }
+  };
   return (
     <div className="flex items-center gap-4">
-    <div className=" hidden md:block relative w-40 md:w-64">
-      <Input
-        type="text"
-        placeholder="Search products..."
-        className="w-full bg-white text-black border-none rounded-full px-4 py-2 pl-10 focus-visible:ring-[3px]"
-      />
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-    </div>
-    <button className="relative p-2 rounded-full hover:bg-gray-100 transition-colors">
+      <form onSubmit={handleSearch} className="hidden md:block relative w-40 md:w-64">
+        <Input
+          type="text"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Search products..."
+          className="w-full bg-white text-black border-none rounded-full px-4 py-2 pl-10 focus-visible:ring-[3px]"
+        />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+      </form>
+      <div className="flex items-center gap-2">
+    <Link href="/wishlist">
+        <Button  variant="ghost" size="icon" className="relative p-2 rounded-full hover:bg-gray-100 transition-colors">
+          <HeartIcon className="w-6 h-6" />
+          {wishlistCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">
+              {wishlistCount}
+            </span>
+          )}
+        </Button>
+    </Link>
+    <Link href="/cart">
+    <Button variant="ghost" size="icon" className="relative p-2 rounded-full hover:bg-gray-100 transition-colors">
       <ShoppingCart className="w-6 h-6 " />
-    </button>
+      {cart.length > 0 && (
+        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">
+          {cart.length}
+        </span>
+      )}
+    </Button>
+    </Link>
+    </div>
     <SignedIn>
       <UserButton />
     </SignedIn>

@@ -12,7 +12,9 @@ const LeftNavbar = () => {
   ];
   return (
     <div>      <div className="flex items-center gap-8 lg:gap-[190px]"> 
-    <h1 className="text-2xl font-extrabold">Exclusive</h1>
+    <Link href="/">
+      <h1 className="text-2xl font-extrabold">Exclusive</h1>
+    </Link>
     {/* Desktop nav links */}
     <ul className="hidden md:flex items-center gap-6 lg:gap-[48px] ">
       {links.map(link => (

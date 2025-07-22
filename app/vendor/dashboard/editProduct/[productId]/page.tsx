@@ -18,6 +18,8 @@ const EditProduct = () => {
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [productPrice, setProductPrice] = useState(0);
+  const [productOldPrice, setProductOldPrice] = useState(0);
+  const [productDiscount, setProductDiscount] = useState(0);
   const [productStock, setProductStock] = useState(0);
   const [productTags, setProductTags] = useState<string[]>([]);
   const [productImages, setProductImages] = useState<string[]>([]);
@@ -35,6 +37,8 @@ const EditProduct = () => {
           setProductName(res.product.name || "");
           setProductDescription(res.product.description || "");
           setProductPrice(res.product.price || 0);
+          setProductOldPrice(res.product.oldPrice || res.product.price || 0);
+          setProductDiscount(res.product.discount || 0);
           setProductStock(res.product.stock || 0);
           setProductTags(res.product.tags || []);
           setProductImages(res.product.images || []);
@@ -62,6 +66,8 @@ const EditProduct = () => {
         name: productName,
         description: productDescription,
         price: productPrice,
+        oldPrice: productOldPrice,
+        discount: productDiscount,
         stock: productStock,
         tags: productTags,
         images: productImages,
@@ -114,31 +120,69 @@ const EditProduct = () => {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="price">Price</Label>
                 <Input
                   id="price"
-                  type="number"
+                  type="text"
                   min="0"
                   step="0.01"
                   placeholder="0.00"
                   value={productPrice}
-                  onChange={(e) => setProductPrice(Number(e.target.value))}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (/^\d*\.?\d*$/.test(val)) {
+                      const value = Number(val);
+                      setProductPrice(value);
+                      setProductOldPrice(value);
+                      if (productDiscount > 0) {
+                        const discounted = value - (value * productDiscount / 100);
+                        setProductPrice(Number(discounted.toFixed(2)));
+                      }
+                    }
+                  }}
                   required
                 />
               </div>
-
               <div className="space-y-2">
-                <Label htmlFor="stock">Stock</Label>
+                <Label htmlFor="discount">Discount (%)</Label>
                 <Input
-                  id="stock"
-                  type="number"
+                  id="discount"
+                  type="text"
                   min="0"
+                  max="100"
                   step="1"
                   placeholder="0"
-                  value={productStock}
-                  onChange={(e) => setProductStock(Number(e.target.value))}
+                  value={productDiscount}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (/^\d*$/.test(val)) {
+                      const discount = Number(val);
+                      setProductDiscount(discount);
+                      if (productOldPrice > 0) {
+                        const discounted = productOldPrice - (productOldPrice * discount / 100);
+                        setProductPrice(Number(discounted.toFixed(2)));
+                      }
+                    }
+                  }}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="oldPrice">Old Price</Label>
+                <Input
+                  id="oldPrice"
+                  type="text"
+                  min="0"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={productOldPrice}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (/^\d*\.?\d*$/.test(val)) {
+                      setProductOldPrice(Number(val));
+                    }
+                  }}
                   required
                 />
               </div>

@@ -162,6 +162,8 @@ export async function editAdminProduct(productId: string, data: {
   stock?: number;
   tags?: string[];
   images?: string[];
+  oldPrice?: number;
+  discount?: number;
 }) {
   try {
     const userId = await getDbUserId();
@@ -183,6 +185,8 @@ export async function editAdminProduct(productId: string, data: {
         name: data.name,
         description: data.description,
         price: data.price,
+        oldPrice: data.oldPrice,      // <-- add this
+        discount: data.discount,      // <-- add this
         stock: data.stock,
         tags: {
           deleteMany: {}, // Clear existing tags
@@ -233,6 +237,8 @@ export async function getAdminProductById(productId: string) {
         description: true,
         price: true,
         stock: true,
+        oldPrice: true,      // <-- add this
+        discount: true,      // <-- add this
         images: { select: { url: true } },
         tags: { select: { tag: { select: { name: true } } } },
       },
@@ -246,6 +252,8 @@ export async function getAdminProductById(productId: string) {
         description: product.description,
         price: product.price,
         stock: product.stock,
+        oldPrice: product.oldPrice,    // <-- add this
+        discount: product.discount,    // <-- add this
         images: product.images.map(img => img.url),
         tags: product.tags.map(t => t.tag.name),
       },
