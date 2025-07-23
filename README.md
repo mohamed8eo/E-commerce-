@@ -1,6 +1,6 @@
 # Exclusive E-Commerce Platform
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Link-blue)](https://your-live-link-here.com)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Link-blue)](https://exclusive-blond-rho.vercel.app/)
 
 A modern, full-featured multi-vendor e-commerce platform built with Next.js, React, Prisma, Clerk authentication, and Tailwind CSS. This project supports customers and vendors, with robust product management, shopping cart, wishlist, and analytics dashboards.
 
