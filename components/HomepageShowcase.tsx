@@ -1,41 +1,43 @@
 import Image from 'next/image';
 import Link from 'next/link';
-
-const cards = [
-  {
-    title: 'PlayStation 5',
-    desc: 'Experience lightning-fast loading with an ultra-high-speed SSD.',
-    img: '/ps5-slim-goedkope-playstation_large 1.png',
-    large: true,
-  },
-  {
-    title: "Gaming Accessories",
-    desc: 'Explore high-performance gaming gear and peripherals.',
-    img: '/woman-with-hat.png',
-  },
-  {
-    title: 'Smart Speakers',
-    desc: 'Immersive sound for your home, powered by AI.',
-    img: '/Frame 707.png',
-  },
-  {
-    title: 'Premium Perfume',
-    desc: 'Crystal-clear audio for gaming and communication.',
-    img: '/Frame 7063.png',
-  },
-];
+import { useTranslation } from 'react-i18next';
 
 export default function HomepageShowcase() {
+  const { t } = useTranslation();
+  const cards = [
+    {
+      title: t('playstation5'),
+      desc: t('ps5_desc'),
+      img: '/ps5-slim-goedkope-playstation_large 1.png',
+      large: true,
+    },
+    {
+      title: t('gaming_accessories'),
+      desc: t('gaming_accessories_desc'),
+      img: '/woman-with-hat.png',
+    },
+    {
+      title: t('smart_speakers'),
+      desc: t('smart_speakers_desc'),
+      img: '/Frame 707.png',
+    },
+    {
+      title: t('premium_perfume'),
+      desc: t('premium_perfume_desc'),
+      img: '/Frame 7063.png',
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-white flex flex-col items-center py-10 px-2">
       <main className="w-full max-w-6xl mx-auto">
         {/* Header Section */}
         <div className="mb-8">
           <span className="bg-red-500 text-white text-sm font-bold px-4 py-1 rounded-md inline-block mb-2">
-            Featured
+            {t('featured')}
           </span>
           <h1 className="text-4xl md:text-5xl font-bold text-black leading-tight mb-2">
-            New Arrival
+            {t('new_arrival')}
           </h1>
         </div>
 
@@ -62,7 +64,7 @@ export default function HomepageShowcase() {
                 href="/shop"
                 className="inline-block underline text-white text-base font-semibold mt-2"
               >
-                Shop Now
+                {t('shop_now')}
               </Link>
             </div>
           </div>
@@ -90,7 +92,7 @@ export default function HomepageShowcase() {
                   href="/shop"
                   className="inline-block underline text-white text-base font-semibold mt-2"
                 >
-                  Shop Now
+                  {t('shop_now')}
                 </Link>
               </div>
             </div>
@@ -115,7 +117,7 @@ export default function HomepageShowcase() {
                     href="/shop"
                     className="inline-block underline text-white text-base font-semibold mt-2"
                   >
-                    Shop Now
+                    {t('shop_now')}
                   </Link>
                 </div>
               </div>
@@ -138,7 +140,7 @@ export default function HomepageShowcase() {
                     href="/shop"
                     className="inline-block underline text-white text-base font-semibold mt-2"
                   >
-                    Shop Now
+                    {t('shop_now')}
                   </Link>
                 </div>
               </div>

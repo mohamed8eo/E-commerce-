@@ -1,10 +1,12 @@
 "use client";
+import '../i18n';
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "./CartContext";
 import { addProductToWishlist, removeProductFromWishlist, isProductInWishlist } from "@/action/wishlist.action";
 import { toast } from "sonner";
 import Image from 'next/image';
+import { useTranslation } from 'react-i18next';
 
 type Product = {
   id: string;
@@ -20,6 +22,7 @@ export default function ShopClient({ products, allTags }: { products: Product[];
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [liked, setLiked] = useState<Record<string, boolean>>({});
   const filtered = selectedTag ? products.filter(p => p.tags.includes(selectedTag)) : products;
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchWishlistStatus = async () => {
@@ -39,14 +42,14 @@ export default function ShopClient({ products, allTags }: { products: Product[];
   return (
     <div className="min-h-screen bg-[#fafbfc] py-10 px-4">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Shop All Products</h1>
+        <h1 className="text-3xl font-bold mb-8">{t('shop_all_products')}</h1>
         <div className="mb-8 flex flex-wrap gap-2 items-center">
-          <span className="font-semibold mr-2">Filter by tag:</span>
+          <span className="font-semibold mr-2">{t('filter_by_tag')}</span>
           <button
             onClick={() => setSelectedTag(null)}
             className={`inline-block px-3 py-1 rounded-full text-sm border ${selectedTag === null ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-blue-100"}`}
           >
-            All
+            {t('all')}
           </button>
           {allTags.map(tag => (
             <button

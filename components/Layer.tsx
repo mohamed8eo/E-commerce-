@@ -1,16 +1,18 @@
 import Link from 'next/link';
 import React from 'react'
+import { useTranslation } from 'react-i18next';
 
 const Layer = () => {
+  const { t } = useTranslation();
   const categories = [
-    "Asus",
-    "Dell",
-    "Lenovo",
-    "HP",
-    "Samsung",
-    "Apple",
-    "Electronics",
-    "Home & Lifestyle",
+    t('asus'),
+    t('dell'),
+    t('lenovo'),
+    t('hp'),
+    t('samsung'),
+    t('apple'),
+    t('electronics'),
+    t('home_lifestyle'),
   ];
 
   // Helper to create slugs for URLs

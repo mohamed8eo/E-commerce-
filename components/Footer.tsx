@@ -1,19 +1,22 @@
+"use client";
 import React from 'react'
 import Image from 'next/image'
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
+  const { t } = useTranslation();
   return (
     <footer className="bg-black text-white mt-8 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-12">
         {/* Subscribe */}
         <div>
-          <h2 className="text-2xl font-extrabold mb-2 uppercase tracking-wide">Exclusive</h2>
-          <div className="font-bold mb-2 uppercase tracking-wide">Subscribe</div>
-          <div className="mb-2 text-gray-300">Get 10% off your first order</div>
+          <h2 className="text-2xl font-extrabold mb-2 uppercase tracking-wide">{t('exclusive')}</h2>
+          <div className="font-bold mb-2 uppercase tracking-wide">{t('subscribe')}</div>
+          <div className="mb-2 text-gray-300">{t('get_10_off_your_first_order')}</div>
           <form className="flex items-center border border-gray-400 rounded-lg overflow-hidden mt-4 bg-black">
             <input
               type="email"
-              placeholder="Enter your email"
+              placeholder={t('enter_your_email')}
               className="bg-black outline-none flex-1 text-white placeholder-gray-400 py-2 px-4 text-base"
             />
             <button type="submit" className="bg-purple-500 hover:bg-purple-600 transition-colors px-4 py-2 flex items-center justify-center">
@@ -27,36 +30,36 @@ const Footer = () => {
         </div>
         {/* Support */}
         <div>
-          <h3 className="text-lg font-bold mb-2 uppercase tracking-wide">Support</h3>
-          <div className="text-gray-300 mb-1">111 Bijoy sarani, Dhaka, DH 1515, Bangladesh.</div>
-          <div className="text-gray-300 mb-1">exclusive@gmail.com</div>
-          <div className="text-gray-300">+88015-88888-9999</div>
+          <h3 className="text-lg font-bold mb-2 uppercase tracking-wide">{t('support')}</h3>
+          <div className="text-gray-300 mb-1">{t('address')}</div>
+          <div className="text-gray-300 mb-1">{t('email')}</div>
+          <div className="text-gray-300">{t('phone')}</div>
         </div>
         {/* Account */}
         <div>
-          <h3 className="text-lg font-bold mb-2 uppercase tracking-wide">Account</h3>
+          <h3 className="text-lg font-bold mb-2 uppercase tracking-wide">{t('account')}</h3>
           <ul className="space-y-1">
-            <li className="hover:underline cursor-pointer">My Account</li>
-            <li className="hover:underline cursor-pointer">Login / Register</li>
-            <li className="hover:underline cursor-pointer">Cart</li>
-            <li className="hover:underline cursor-pointer">Wishlist</li>
-            <li className="hover:underline cursor-pointer">Shop</li>
+            <li className="hover:underline cursor-pointer">{t('my_account')}</li>
+            <li className="hover:underline cursor-pointer">{t('login_register')}</li>
+            <li className="hover:underline cursor-pointer">{t('cart')}</li>
+            <li className="hover:underline cursor-pointer">{t('wishlist')}</li>
+            <li className="hover:underline cursor-pointer">{t('shop')}</li>
           </ul>
         </div>
         {/* Quick Link */}
         <div>
-          <h3 className="text-lg font-bold mb-2 uppercase tracking-wide">Quick Link</h3>
+          <h3 className="text-lg font-bold mb-2 uppercase tracking-wide">{t('quick_link')}</h3>
           <ul className="space-y-1">
-            <li className="hover:underline cursor-pointer">Privacy Policy</li>
-            <li className="hover:underline cursor-pointer">Terms Of Use</li>
-            <li className="hover:underline cursor-pointer">FAQ</li>
-            <li className="hover:underline cursor-pointer">Contact</li>
+            <li className="hover:underline cursor-pointer">{t('privacy_policy')}</li>
+            <li className="hover:underline cursor-pointer">{t('terms_of_use')}</li>
+            <li className="hover:underline cursor-pointer">{t('faq')}</li>
+            <li className="hover:underline cursor-pointer">{t('contact')}</li>
           </ul>
         </div>
         {/* Download App */}
         <div>
-          <h3 className="text-lg font-bold mb-2 uppercase tracking-wide">Download App</h3>
-          <div className="text-gray-300 text-xs mb-2">Save $3 with App New User Only</div>
+          <h3 className="text-lg font-bold mb-2 uppercase tracking-wide">{t('download_app')}</h3>
+          <div className="text-gray-300 text-xs mb-2">{t('save_3_with_app_new_user_only')}</div>
           <div className="flex items-center gap-3 mb-3">
             {/* Use correct images from /public */}
             <Image src="/Qr Code.png" alt="QR Code" width={60} height={60} className="bg-white rounded" />

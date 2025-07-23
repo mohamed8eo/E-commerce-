@@ -7,6 +7,7 @@ import { useCart } from "./CartContext";
 import { toast } from "sonner";
 import Link from "next/link";
 import { useWishlist } from "@/components/WishlistContext";
+import { useTranslation } from 'react-i18next';
 
 interface Product {
   id: string;
@@ -27,6 +28,7 @@ const PRODUCTS_PER_PAGE = COLUMNS * ROWS;
 const MAX_PRODUCTS = 16;
 
 const ExploreProductsSection = () => {
+  const { t } = useTranslation();
   const [products, setProducts] = useState<Product[]>([]);
   const [page, setPage] = useState(0);
   const totalPages = Math.ceil(Math.min(products.length, MAX_PRODUCTS) / PRODUCTS_PER_PAGE);
@@ -66,10 +68,10 @@ const ExploreProductsSection = () => {
         {/* Section Header */}
         <div className="flex items-center gap-2 mb-2">
           <span className="w-4 h-8 bg-red-400 rounded-sm inline-block"></span>
-          <span className="text-red-500 font-semibold text-lg">Our Products</span>
+          <span className="text-red-500 font-semibold text-lg">{t('ourProducts')}</span>
         </div>
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-4xl font-bold">Explore Our Products</h2>
+          <h2 className="text-4xl font-bold">{t('exploreOurProducts')}</h2>
           <div className="flex gap-3">
             <button
               className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl"
@@ -139,7 +141,7 @@ const ExploreProductsSection = () => {
                       />
                     ) : (
                       <div className="w-[120px] h-[120px] flex items-center justify-center bg-gray-200 text-gray-400 rounded">
-                        No Image
+                        {t('noImage')}
                       </div>
                     )}
                   </div>
@@ -217,10 +219,10 @@ const ExploreProductsSection = () => {
                           price: product.price,
                           image: product.image || undefined,
                         });
-                        toast.success("Added to cart!");
+                        toast.success(t('addedToCart'));
                       }}
                     >
-                      Add To Cart
+                      {t('addToCart')}
                     </button>
                   )}
                 </div>
@@ -233,7 +235,7 @@ const ExploreProductsSection = () => {
         <div className="flex justify-center mt-12">
           <Link href="/shop">
             <button className="bg-red-500 text-white px-10 py-3 font-semibold text-lg hover:bg-red-600 transition rounded-xl">
-              View All Products
+              {t('viewAllProducts')}
             </button>
           </Link>
         </div>

@@ -1,4 +1,5 @@
-"use client"
+"use client";
+import '../i18n';
 
 import { redirect, usePathname } from 'next/navigation'
 import { Input } from "@/components/ui/input";
@@ -17,6 +18,7 @@ import { useCart } from "./CartContext";
 import { useRouter } from "next/navigation";
 import { HeartIcon } from 'lucide-react';
 import { useWishlist } from "@/components/WishlistContext";
+import { useTranslation } from 'react-i18next';
 
 const RightNavbar = () => {
   const { user } = useUser();
@@ -27,6 +29,7 @@ const RightNavbar = () => {
   const [search, setSearch] = useState("");
   const router = useRouter();
   const { count: wishlistCount } = useWishlist();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
   if (user?.publicMetadata?.role === 'vendor') {
@@ -61,6 +64,12 @@ const RightNavbar = () => {
     if (search.trim()) {
       router.push(`/search?tag=${encodeURIComponent(search)}`);
     }
+  };
+
+  const handleLanguageToggle = () => {
+    const newLang = i18n.language === 'en' ? 'ar' : 'en';
+    i18n.changeLanguage(newLang);
+    document.dir = newLang === 'ar' ? 'rtl' : 'ltr';
   };
   return (
     <div className="flex items-center gap-4">
@@ -111,27 +120,31 @@ const RightNavbar = () => {
           <SheetTitle className="p-6 text-xl font-bold border-b">Menu</SheetTitle>
           {/* Search bar for mobile inside Sheet, below Menu heading */}
           <div className="p-4 border-b">
-            <div className="relative w-full">
-              <Input
-                type="text"
-                placeholder="Search products..."
-                className="
-                  w-full
-                  bg-gray-100
-                  text-black
-                  border border-gray-300
-                  rounded-lg
-                  px-10
-                  py-2
-                  shadow-sm
-                  focus:border-primary
-                  focus:ring-2
-                  focus:ring-primary/20
-                  placeholder:text-gray-400
-                  transition
-                "
-              />
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <div className="relative w-full">
+                <form onSubmit={handleSearch}>
+                <Input
+                  type="text"
+                    placeholder={t('search_placeholder')}
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                  className="
+                    w-full
+                    bg-gray-100
+                    text-black
+                    border border-gray-300
+                    rounded-lg
+                    px-10
+                    py-2
+                    shadow-sm
+                    focus:border-primary
+                    focus:ring-2
+                    focus:ring-primary/20
+                    placeholder:text-gray-400
+                    transition
+                  "
+                />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              </form>
             </div>
           </div>
           <ul className="flex flex-col gap-2 p-6">
@@ -143,26 +156,26 @@ const RightNavbar = () => {
                     ${pathname === link.path ? 'bg-[#f3f3f3] text-[#6c47ff]' : 'text-gray-700 hover:bg-[#f3f3f3] hover:text-[#6c47ff]'}
                   `}
                 >
-                  {link.name}
+                  {t(link.name.toLowerCase())}
                 </Link>
               </li>
             ))}
             {!isVendor && (
-                <Button onClick={handleBecomeVendor}>Become a Vendor</Button>
+                <Button onClick={handleBecomeVendor}>{t('become_vendor')}</Button>
               )}
               {isVendor && (
                 <Button onClick={handleExitVendor} variant="destructive">
-                  Exit Vendor
+                  {t('exit_vendor')}
                 </Button>
               )}
           </ul>
           {/* Language switcher for mobile, at the bottom of the Sheet */}
           <div className="flex justify-center mt-auto mb-6 md:hidden">
             <button
-              onClick={() => setLanguage(language === "English" ? "Arabic" : "English")}
+              onClick={handleLanguageToggle}
               className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium shadow transition-colors text-base"
             >
-              <span>{language === "English" ? "🇺🇸 EN" : "🇪🇬 AR"}</span>
+              <span>{i18n.language === 'en' ? '🇺🇸 EN' : '🇪🇬 AR'}</span>
             </button>
           </div>
         </SheetContent>

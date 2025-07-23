@@ -1,37 +1,38 @@
-// app/(root)/page.tsx (Server Component)
+"use client";
+import '../../i18n';
+import { useTranslation } from 'react-i18next';
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import Banner, { MusicExperienceSection } from "@/components/Banner";
-import  Layer  from '@/components/Layer';
+import Layer from '@/components/Layer';
 import FlashSales from "@/components/FlashSales";
 import BrowseCategories from '@/components/BrowseCategories';
 import BestSellingProducts from '@/components/BestSellingProducts';
 import ExploreProductsSection from '@/components/ExploreProductsSection';
 import HomepageShowcase from '@/components/HomepageShowcase';
-import Testna from '@/components/Testna'
-export default async function Home() {
-  const { userId } = await auth();
-  if (!userId) {
-    redirect('/sign-up');
-  }
+import Testna from '@/components/Testna';
 
-    return (
-      <>
-        <div className="flex bg-white p-4 min-h-[400px]">
-          <aside className="w-full md:w-1/4 lg:w-1/5 border-r border-gray-200 pr-5 pt-5  justify-end hidden md:flex">
-            <Layer/>
-          </aside>
-          <div className="flex-1 flex items-center justify-center">
-            <Banner />
-          </div>
+export default function Home() {
+  const { t } = useTranslation();
+  // If you want to use t() for any text in this file, do so here
+  // Otherwise, just render the components as before
+  return (
+    <>
+      <div className="flex bg-white p-4 min-h-[400px]">
+        <aside className="w-full md:w-1/4 lg:w-1/5 border-r border-gray-200 pr-5 pt-5  justify-end hidden md:flex">
+          <Layer />
+        </aside>
+        <div className="flex-1 flex items-center justify-center">
+          <Banner />
         </div>
-        <FlashSales />
-        <BrowseCategories />
-        <BestSellingProducts />
-        <MusicExperienceSection />
-        <ExploreProductsSection />
-        <HomepageShowcase />
-        <Testna/>
-      </>
-    );
+      </div>
+      <FlashSales />
+      <BrowseCategories />
+      <BestSellingProducts />
+      <MusicExperienceSection />
+      <ExploreProductsSection />
+      <HomepageShowcase />
+      <Testna />
+    </>
+  );
 }

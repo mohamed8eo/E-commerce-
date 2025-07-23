@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/admin/ImageUpload";
 import { Loader2Icon } from "lucide-react"
+import { useTranslation } from 'react-i18next';
+import '../../../i18n';
 
 
 const CreatePost = () => {
@@ -50,13 +52,14 @@ const CreatePost = () => {
       setIsAdding(false);
     }
   }
+  const { t } = useTranslation();
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-1 p-8 flex flex-col">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold">Add New Product</h1>
+          <h1 className="text-4xl font-bold">{t('add_new_product')}</h1>
           <p className="text-muted-foreground mt-2">
-            Fill in the details below to create a new product listing.
+            {t('fill_details_create')}
           </p>
         </div>
         <div className="flex-1 flex flex-col w-auto md:w-[700px]  xl:w-[1050px] mb-[50px] md:mb-0">
@@ -65,10 +68,10 @@ const CreatePost = () => {
             handleSubmit();
           }} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="name">Product Name</Label>
+              <Label htmlFor="name">{t('product_name')}</Label>
               <Input
                 id="name"
-                placeholder="Enter product name"
+                placeholder={t('enter_product_name')}
                 value={productName}
                 onChange={(e) => setProductName(e.target.value)}
                 required
@@ -76,10 +79,10 @@ const CreatePost = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t('description')}</Label>
               <Textarea
                 id="description"
-                placeholder="Enter product description"
+                placeholder={t('enter_product_description')}
                 value={productDescription}
                 onChange={(e) => setProductDescription(e.target.value)}
                 required

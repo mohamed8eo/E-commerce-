@@ -1,8 +1,11 @@
-// app/sign-up/page.tsx
+"use client";
+import '../../../i18n';
 import { SignUp } from "@clerk/nextjs";
 import Image from "next/image";
+import { useTranslation } from 'react-i18next';
 
 export default function SignUpPage() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="flex w-full max-w-[2000pxl bg-white rounded-2xl shadow-2xl overflow-hidden min-h-[600px]">
@@ -19,8 +22,8 @@ export default function SignUpPage() {
         {/* Right: Sign up form */}
         <div className="flex-1 flex flex-col justify-center items-center px-8 py-12 min-h-full">
           <div className="w-full max-w-sm">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Create an account</h2>
-            <p className="text-gray-500 mb-8">Enter your details below</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('create_account')}</h2>
+            <p className="text-gray-500 mb-8">{t('enter_details_below')}</p>
             <SignUp
               appearance={{
                 elements: {

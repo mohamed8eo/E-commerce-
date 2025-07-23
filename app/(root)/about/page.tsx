@@ -1,3 +1,6 @@
+"use client";
+import '../../../i18n';
+import { useTranslation } from 'react-i18next';
 import Link from "next/link"
 import Image from 'next/image'
 import BreadcrumbWithCustomSeparator from '@/components/BreadcrumbWithCustomSeparator';
@@ -15,28 +18,28 @@ const cards: Card[] = [
     img: '/Services.png',
     alt: 'Sellers',
     value: '10.5k',
-    label: 'Sallers active our site',
+    label: 'sellers_active',
     highlight: false,
   },
   {
     img: '/Services2.png',
     alt: 'Monthly Product Sale',
     value: '33k',
-    label: 'Mopnthly Produduct Sale',
+    label: 'monthly_product_sale',
     highlight: true,
   },
   {
     img: '/Services3.png',
     alt: 'Customer Active',
     value: '45.5k',
-    label: 'Customer active in our site',
+    label: 'customer_active',
     highlight: false,
   },
   {
     img: '/Services4.png',
     alt: 'Annual Gross Sale',
     value: '25k',
-    label: 'Anual gross sale in our site',
+    label: 'annual_gross_sale',
     highlight: false,
   },
 ];
@@ -91,26 +94,27 @@ type Service = {
 const services: Service[] = [
   {
     img: "/1Services.png",
-    title: "FREE AND FAST DELIVERY",
-    desc: "Free delivery for all orders over $140",
+    title: "money_back_guarantee",
+    desc: "money_back_text",
     highlight: true,
   },
   {
     img: "/2Services.png",
-    title: "24/7 CUSTOMER SERVICE",
-    desc: "Friendly 24/7 customer support",
+    title: "customer_service",
+    desc: "customer_service_text",
     highlight: false,
   },
   {
     img: "/3Services.png",
-    title: "MONEY BACK GUARANTEE",
-    desc: "We return money within 30 days",
+    title: "free_fast_delivery",
+    desc: "free_fast_delivery_text",
     highlight: true,
   },
 ];
 
 
-const page = () => {
+export default function AboutPage() {
+  const { t } = useTranslation();
   return (
     <>
       <div className="mt-9 ml-4 sm:ml-8">
@@ -120,26 +124,28 @@ const page = () => {
         flex flex-col-reverse lg:flex-row-reverse
         items-center justify-between
         pt-8 sm:pt-16 lg:pt-[135px]
-        px-4 sm:pl-8 lg:pl-[80px]
-        gap-8 lg:gap-16 lg:pr-0
+        px-4 sm:pl-8 lg:px-[80px]
+        gap-8 lg:gap-16 
       ">
         {/* image */}
         <Image
           src="/About.png"
           alt="About Section"
+          width={400}
+          height={400}
           className="w-full max-w-[350px] sm:max-w-[500px] lg:max-w-[705px] h-auto"
         />
         {/* content */}
         <div className="flex flex-col gap-6 sm:gap-8 lg:gap-10 w-full max-w-xl lg:w-[525px]">
           <h1 className="text-3xl sm:text-4xl lg:text-[54px] leading-tight lg:leading-[64px] font-semibold tracking-[0.06em]">
-            Our Story
+            {t('ourStory')}
           </h1>
           <div className="text-base sm:text-lg leading-relaxed flex flex-col gap-4 sm:gap-6">
             <p>
-              Launced in 2015, Exclusive is South Asia’s premier online shopping makterplace with an active presense in Bangladesh. Supported by wide range of tailored marketing, data and service solutions, Exclusive has 10,500 sallers and 300 brands and serves 3 millioons customers across the region.
+              {t('launchedIn2015')}
             </p>
             <p>
-              Exclusive has more than 1 Million products to offer, growing at a very fast. Exclusive offers a diverse assotment in categories ranging from consumer.
+              {t('exclusiveHasMoreThan')}
             </p>
           </div>
         </div>
@@ -160,7 +166,7 @@ const page = () => {
               </div>
             </div>
             <div className="text-3xl font-bold mb-2">{card.value}</div>
-            <div className={card.highlight ? "text-lg text-center text-white" : "text-lg text-center"}>{card.label}</div>
+            <div className={card.highlight ? "text-lg text-center text-white" : "text-lg text-center"}>{t(card.label)}</div>
           </div>
         ))}
       </div>
@@ -177,7 +183,7 @@ const page = () => {
               className="rounded-lg object-cover mb-4"
             />
             <div className="text-2xl font-bold">{member.name}</div>
-            <div className="text-gray-600 mb-2">{member.title}</div>
+            <div className="text-gray-600 mb-2">{t(member.title)}</div>
             <div className="flex gap-4 mt-2">
               {/* Placeholder SVGs for social icons */}
               {member.socials.map((s, i) => (
@@ -212,15 +218,13 @@ const page = () => {
                 s.highlight ? "border-2 border-purple-400" : ""
               }`}
             >
-              <Image src={s.img} alt={s.title} width={40} height={40} />
+              <Image src={s.img} alt={t(s.title)} width={40} height={40} />
             </div>
-            <div className="font-bold text-center">{s.title}</div>
-            <div className="text-sm text-gray-500 text-center mt-1">{s.desc}</div>
+            <div className="font-bold text-center">{t(s.title)}</div>
+            <div className="text-sm text-gray-500 text-center mt-1">{t(s.desc)}</div>
           </div>
         ))}
       </div>
     </>
   )
-}
-
-export default page 
+} 

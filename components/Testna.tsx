@@ -1,9 +1,12 @@
 // components/ServiceFeatures.js
-"use client"
+"use client";
+import '../i18n';
 import React from 'react';
 import { Truck, Headphones, DollarSign } from 'lucide-react'; // Import specific icons from lucide-react
+import { useTranslation } from 'react-i18next';
 
 const ServiceFeatures = () => {
+  const { t } = useTranslation();
   return (
     <section className="bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
@@ -16,9 +19,9 @@ const ServiceFeatures = () => {
               <Truck className="text-white w-10 h-10" /> {/* Adjust size with w- and h- utilities */}
             </div>
             <h3 className="text-xl font-bold text-gray-800 mb-2 uppercase tracking-wide">
-              Free And Fast Delivery
+              {t('free_fast_delivery')}
             </h3>
-            <p className="text-gray-600 text-sm">Free delivery for all orders over $140</p>
+            <p className="text-gray-600 text-sm">{t('free_fast_delivery_text')}</p>
           </div>
 
           {/* Feature 2: 24/7 Customer Service */}
@@ -28,9 +31,9 @@ const ServiceFeatures = () => {
               <Headphones className="text-white w-10 h-10" />
             </div>
             <h3 className="text-xl font-bold text-gray-800 mb-2 uppercase tracking-wide">
-              24/7 Customer Service
+              {t('customer_service')}
             </h3>
-            <p className="text-gray-600 text-sm">Friendly 24/7 customer support</p>
+            <p className="text-gray-600 text-sm">{t('customer_service_text')}</p>
           </div>
 
           {/* Feature 3: Money Back Guarantee */}
@@ -40,9 +43,9 @@ const ServiceFeatures = () => {
               <DollarSign className="text-white w-10 h-10" />
             </div>
             <h3 className="text-xl font-bold text-gray-800 mb-2 uppercase tracking-wide">
-              Money Back Guarantee
+              {t('money_back_guarantee')}
             </h3>
-            <p className="text-gray-600 text-sm">We return money within 30 days</p>
+            <p className="text-gray-600 text-sm">{t('money_back_text')}</p>
           </div>
         </div>
 

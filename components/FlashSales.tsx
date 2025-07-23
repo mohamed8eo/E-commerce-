@@ -7,6 +7,7 @@ import { GetRandomProducts } from "@/action/product.action";
 import { useWishlist } from "@/components/WishlistContext";
 import { useCart } from "./CartContext";
 import { toast } from "sonner";
+import { useTranslation } from 'react-i18next';
 
 interface Product {
   id: string;
@@ -35,6 +36,7 @@ const getTimeLeft = (end: Date) => {
 };
 
 const FlashSales = () => {
+  const { t } = useTranslation();
   const [products, setProducts] = useState<Product[]>([]);
   const [timeLeft, setTimeLeft] = useState(getTimeLeft(FLASH_SALE_END));
   const { addToCart, updateQuantity, getItemQuantity, removeFromCart } = useCart();
@@ -83,9 +85,9 @@ const FlashSales = () => {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="w-2 h-6 bg-red-400 rounded-sm inline-block"></span>
-            <span className="text-red-500 font-semibold text-lg">Today&apos;s</span>
+            <span className="text-red-500 font-semibold text-lg">{t('todays')}</span>
           </div>
-          <h2 className="text-4xl font-bold">Flash Sales</h2>
+          <h2 className="text-4xl font-bold">{t('flash_sales')}</h2>
         </div>
         <div className="flex items-end flex-col gap-4">
           <div className="flex items-center gap-4">
@@ -226,10 +228,10 @@ const FlashSales = () => {
                           price: product.price,
                           image: product.image || undefined,
                         });
-                        toast.success("Added to cart!");
+                        toast.success(t('added_to_cart'));
                       }}
                     >
-                      Add To Cart
+                      {t('add_to_cart')}
                     </Button>
                   )}
                 </div>

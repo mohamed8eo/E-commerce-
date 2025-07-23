@@ -1,19 +1,21 @@
 "use client"
 import Link from "next/link"
 import { usePathname } from "next/navigation";
+import { useTranslation } from 'react-i18next';
 
 const LeftNavbar = () => {
   const pathname = usePathname();
+  const { t } = useTranslation();
   const links = [
-    { name: "Home", path: "/" },
-    { name: "Shop", path: "/shop" },
-    { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
+    { name: 'home', path: '/' },
+    { name: 'shop', path: '/shop' },
+    { name: 'about', path: '/about' },
+    { name: 'contact', path: '/contact' },
   ];
   return (
     <div>      <div className="flex items-center gap-8 lg:gap-[190px]"> 
     <Link href="/">
-      <h1 className="text-2xl font-extrabold">Exclusive</h1>
+      <h1 className="text-2xl font-extrabold">{t('exclusive')}</h1>
     </Link>
     {/* Desktop nav links */}
     <ul className="hidden md:flex items-center gap-6 lg:gap-[48px] ">
@@ -28,7 +30,7 @@ const LeftNavbar = () => {
               ${pathname === link.path ? 'before:scale-x-100' : 'hover:before:scale-x-100'}
             `}
           >
-            {link.name}
+            {t(link.name)}
           </Link>
         </li>
       ))}

@@ -1,4 +1,5 @@
 "use client";
+import '../i18n';
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,6 +7,7 @@ import { useCart } from "./CartContext";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { useWishlist } from "@/components/WishlistContext";
+import { useTranslation } from 'react-i18next';
 
 type Product = {
   id: string;
@@ -31,6 +33,7 @@ export default function ProductDetailClient({ product, images, related }: Props)
   const quantity = getItemQuantity(product.id);
   const router = useRouter();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { t } = useTranslation();
 
   return (
     <div className="max-w-7xl mx-auto py-10 px-4">
@@ -62,19 +65,19 @@ export default function ProductDetailClient({ product, images, related }: Props)
           <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
           <div className="flex items-center gap-2 mb-2">
             <span className="text-yellow-500 text-lg">★ 4.9</span>
-            <span className="text-gray-500">(150 Reviews)</span>
-            <span className="text-green-600 ml-4">| In Stock</span>
+            <span className="text-gray-500">{t('reviews')}</span>
+            <span className="text-green-600 ml-4">{t('in_stock')}</span>
           </div>
           <div className="text-2xl font-bold mb-4">${product.price}</div>
-          <p className="text-gray-600 mb-4">{product.description || "No description."}</p>
+          <p className="text-gray-600 mb-4">{product.description || t('no_description')}</p>
           {/* Color and Size selectors (static for demo) */}
           <div className="mb-4 flex gap-4 items-center">
-            <span className="font-semibold">Colours:</span>
+            <span className="font-semibold">{t('colours')}</span>
             <button onClick={() => setColor(0)} className={`w-6 h-6 rounded-full border-2 ${color === 0 ? "border-red-500" : "border-gray-300"} bg-red-500`}></button>
             <button onClick={() => setColor(1)} className={`w-6 h-6 rounded-full border-2 ${color === 1 ? "border-gray-800" : "border-gray-300"} bg-gray-800`}></button>
           </div>
           <div className="mb-4 flex gap-4 items-center">
-            <span className="font-semibold">Size:</span>
+            <span className="font-semibold">{t('size')}</span>
             {["XS", "S", "M", "L", "XL"].map(s => (
               <button key={s} onClick={() => setSize(s)} className={`px-3 py-1 border rounded hover:bg-gray-100 ${size === s ? "bg-black text-white" : ""}`}>{s}</button>
             ))}
@@ -91,7 +94,7 @@ export default function ProductDetailClient({ product, images, related }: Props)
                 }
               }}
               disabled={quantity === 0} 
-            >-</Button>
+            >{t('minus')}</Button>
             <span className="px-3 font-semibold text-base select-none">{quantity}</span>
             <button
               className="bg-gray-200 px-3 py-1 rounded text-lg font-bold hover:bg-gray-300"
@@ -102,7 +105,7 @@ export default function ProductDetailClient({ product, images, related }: Props)
                   await updateQuantity(product.id, quantity + 1);
                 }
               }}
-            >+</button>
+            >{t('plus')}</button>
             <Button
               className="ml-6 bg-red-500 hover:bg-red-600 text-white font-bold px-8 py-2 rounded-lg shadow transition"
               onClick={async () => {
@@ -117,18 +120,18 @@ export default function ProductDetailClient({ product, images, related }: Props)
                 router.push("/cart");
               }}
             >
-              Buy Now
+              {t('buy_now')}
             </Button>
           </div>
           {/* Delivery Info */}
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-3 border rounded-lg p-3">
-              <span className="font-bold">🚚 Free Delivery</span>
-              <span className="text-gray-500 text-sm">Enter your postal code for Delivery Availability</span>
+              <span className="font-bold">{t('free_delivery')}</span>
+              <span className="text-gray-500 text-sm">{t('delivery_availability')}</span>
             </div>
             <div className="flex items-center gap-3 border rounded-lg p-3">
-              <span className="font-bold">↩️ Return Delivery</span>
-              <span className="text-gray-500 text-sm">Free 30 Days Delivery Returns. Details</span>
+              <span className="font-bold">{t('return_delivery')}</span>
+              <span className="text-gray-500 text-sm">{t('delivery_returns')}</span>
             </div>
           </div>
           {/* Wishlist Button */}
@@ -155,7 +158,7 @@ export default function ProductDetailClient({ product, images, related }: Props)
       </div>
       {/* Related Items */}
       <div className="mt-16">
-        <h2 className="text-xl font-bold mb-6 text-red-500">Related Item</h2>
+        <h2 className="text-xl font-bold mb-6 text-red-500">{t('related_item')}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {related.map((item: Product) => {
             const relQuantity = getItemQuantity(item.id);
@@ -187,14 +190,14 @@ export default function ProductDetailClient({ product, images, related }: Props)
                             await updateQuantity(item.id, relQuantity - 1);
                           }
                         }}
-                      >-</Button>
+                      >{t('minus')}</Button>
                       <span className="px-3 font-semibold text-base select-none">{relQuantity}</span>
                       <Button
                         className="bg-gray-200 px-3 py-1 rounded text-lg font-bold hover:bg-gray-300"
                         onClick={async () => {
                           await updateQuantity(item.id, relQuantity + 1);
                         }}
-                      >+</Button>
+                      >{t('plus')}</Button>
                     </div>
                   ) : (
                     <Button
@@ -208,7 +211,7 @@ export default function ProductDetailClient({ product, images, related }: Props)
                         });
                       }}
                     >
-                      Add To Cart
+                      {t('add_to_cart')}
                     </Button>
                   )}
                 </div>

@@ -1,7 +1,9 @@
-"use client"
+"use client";
+import '../i18n';
 import Image from "next/image";
 import Link from "next/link";
 import React, { useCallback, useMemo, useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 
 const banners = [
   {
@@ -28,6 +30,7 @@ const banners = [
 
 const Banner = () => {
   const [current, setCurrent] = useState(0);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -52,17 +55,17 @@ const Banner = () => {
             <div className="z-10 text-white w-full sm:w-1/2 max-w-xl text-center sm:text-left">
               <div className="flex items-center justify-center sm:justify-start mb-4 sm:mb-6">
                 <Image src={banner.logo} alt={banner.logoAlt} width={40} height={40} className="mr-3" />
-                <span className="font-semibold text-xl sm:text-2xl tracking-wide">{banner.title}</span>
+                <span className="font-semibold text-xl sm:text-2xl tracking-wide">{t(banner.title)}</span>
               </div>
               <h2
                 className="text-3xl sm:text-5xl font-bold mb-6 leading-tight text-white/90"
-                dangerouslySetInnerHTML={{ __html: banner.subtitle }}
+                dangerouslySetInnerHTML={{ __html: t(banner.subtitle) }}
               />
               <Link
                 href={banner.link}
                 className="inline-block text-sm sm:text-base font-medium underline underline-offset-4 hover:text-red-400 transition"
               >
-                {banner.linkText} <span className="ml-1">&rarr;</span>
+                {t(banner.linkText)} <span className="ml-1">&rarr;</span>
               </Link>
             </div>
             <div className="relative w-full sm:w-1/2 flex justify-center items-center">
@@ -95,6 +98,7 @@ export default Banner;
 
 const MusicExperienceSection = () => {
   const END_TIME = useMemo(() => new Date(Date.now() + 5 * 24 * 60 * 60 * 1000 + 23 * 60 * 60 * 1000 + 59 * 60 * 1000 + 35 * 1000), []);
+  const { t } = useTranslation();
 
   const getTimeLeft = useCallback(() => {
     const now = new Date();
@@ -120,9 +124,9 @@ const MusicExperienceSection = () => {
     <section className="w-full flex justify-center items-center py-12">
       <div className="w-full max-w-6xl bg-black rounded-2xl flex flex-col md:flex-row items-center overflow-hidden shadow-xl relative">
         <div className="flex-1 px-8 sm:px-10 py-12 flex flex-col justify-center z-10">
-          <span className="text-green-400 font-bold text-base sm:text-lg mb-4">Categories</span>
+          <span className="text-green-400 font-bold text-base sm:text-lg mb-4">{t('categories')}</span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-8 leading-tight">
-            Enhance Your<br />Music Experience
+            {t('enhance_music')}
           </h2>
           <div className="flex flex-wrap gap-4 mb-8 justify-center sm:justify-start">
             {['days', 'hours', 'minutes', 'seconds'].map((label) => (
@@ -131,14 +135,14 @@ const MusicExperienceSection = () => {
                   {String(timer[label as keyof typeof timer]).padStart(2, '0')}
                 </span>
                 <span className="text-white text-sm sm:text-base capitalize">
-                  {label}
+                  {t(label)}
                 </span>
               </div>
             ))}
           </div>
           <Link href="/shop">
             <button className="bg-green-500 hover:bg-green-600 text-white font-bold text-base sm:text-lg px-10 sm:px-16 py-3 sm:py-4 rounded-lg shadow transition">
-              Buy Now!
+              {t('buy_now')}
             </button>
           </Link>
         </div>

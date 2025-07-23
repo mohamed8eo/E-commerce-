@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useCart } from "./CartContext";
 import Link from "next/link";
 import { useWishlist } from "@/components/WishlistContext";
+import { useTranslation } from 'react-i18next';
 
 interface Product {
   id: string;
@@ -27,6 +28,7 @@ const CARDS_PER_VIEW = 4;
 const SCROLL_AMOUNT = CARD_WIDTH + CARD_GAP;
 
 const BestSellingProducts = () => {
+  const { t } = useTranslation();
   const [products, setProducts] = useState<Product[]>([]);
   const [scroll, setScroll] = useState(0);
   const maxScroll = Math.max(products.length - CARDS_PER_VIEW, 0);
@@ -63,11 +65,11 @@ const BestSellingProducts = () => {
     <section className="w-full max-w-7xl mx-auto mt-16 px-2">
       <div className="flex items-center gap-2 mb-2">
         <span className="w-2 h-6 bg-red-400 rounded-sm inline-block"></span>
-        <span className="text-red-500 font-semibold text-lg">This Month</span>
+        <span className="text-red-500 font-semibold text-lg">{t('this_month')}</span>
       </div>
 
       <div className="flex items-center justify-end sm:justify-between  mb-8 flex-wrap gap-4">
-        <h2 className="text-4xl font-bold">Best Selling Products</h2>
+        <h2 className="text-4xl font-bold">{t('best_selling_products')}</h2>
         <div className="flex gap-3">
           <button
             className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl disabled:opacity-50 disabled:cursor-not-allowed"
@@ -196,8 +198,8 @@ const BestSellingProducts = () => {
                         price: product.price,
                         image: product.image || undefined,
                       });
-                      toast.success("Added to cart!");
-                    }}>Add To Cart</button>
+                      toast.success(t('added_to_cart'));
+                    }}>{t('add_to_cart')}</button>
                   )}
                 </div>
               </Link>
