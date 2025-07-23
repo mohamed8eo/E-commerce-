@@ -18,7 +18,7 @@ export default async function Home() {
     return (
       <>
         <div className="flex bg-white p-4 min-h-[400px]">
-          <aside className="w-full md:w-1/4 lg:w-1/5 border-r border-gray-200 pr-5 pt-5 flex justify-end">
+          <aside className="w-full md:w-1/4 lg:w-1/5 border-r border-gray-200 pr-5 pt-5  justify-end hidden md:flex">
             <Layer/>
           </aside>
           <div className="flex-1 flex items-center justify-center">

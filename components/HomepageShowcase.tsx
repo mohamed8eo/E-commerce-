@@ -19,9 +19,9 @@ const cards = [
     img: '/Frame 707.png',
   },
   {
-    title: 'Premium Headsets',
+    title: 'Premium Perfume',
     desc: 'Crystal-clear audio for gaming and communication.',
-    img: '/gaming-headset.png',
+    img: '/Frame 7063.png',
   },
 ];
 

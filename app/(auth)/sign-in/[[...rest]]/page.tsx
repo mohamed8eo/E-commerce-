@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function SignInPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="flex w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden min-h-[600px]">
+      <div className="flex w-full max-w-[2000pxl bg-white rounded-2xl shadow-2xl overflow-hidden min-h-[600px]">
         {/* Left: E-commerce image */}
         <div className="hidden md:flex flex-1 items-center justify-center">
           <Image
@@ -16,10 +16,10 @@ export default function SignInPage() {
             className="object-contain rounded-lg"
           />
         </div>
-        {/* Right: Sign in form */}
+        {/* Right: Sign up form */}
         <div className="flex-1 flex flex-col justify-center items-center px-8 py-12 min-h-full">
           <div className="w-full max-w-sm">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back!</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Create an account</h2>
             <p className="text-gray-500 mb-8">Enter your details below</p>
             <SignIn
               appearance={{
@@ -34,7 +34,7 @@ export default function SignInPage() {
                   formFieldLabel: "hidden",
                 },
               }}
-              signUpUrl="/sign-up"
+              signInUrl="/sign-in"
             />
           </div>
         </div>
