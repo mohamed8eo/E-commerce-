@@ -1,5 +1,5 @@
 "use client";
-import '../../../i18n';
+import '../../../../i18n';
 import { SignIn } from "@clerk/nextjs";
 import Image from "next/image";
 import { useTranslation } from 'react-i18next';

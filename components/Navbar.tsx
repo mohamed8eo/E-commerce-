@@ -6,7 +6,7 @@ const Navbar = () => {
 
 
   return (
-    <div className="w-full px-4 py-4 flex items-center justify-between bg-white shadow-sm">
+    <div className="w-full px-4 py-4 flex items-center justify-between bg-white shadow-sm sticky top-0 z-40">
       {/* Left: Logo and nav links */}
         <LeftNavbar/>
       {/* Right: Search and cart and user button (desktop only) */}

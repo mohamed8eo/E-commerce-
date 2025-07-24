@@ -267,3 +267,32 @@ export async function UpdateProductQuantityInCart(productId: string, quantity: n
   });
   return { success: true };
 }
+
+export async function CreateOrderFromCart() {
+  const userId = await getDbUserId();
+  if (!userId) throw new Error("User not found");
+  const cart = await prisma.cart.findUnique({
+    where: { userId },
+    include: { items: { include: { product: true } } },
+  });
+  if (!cart || !cart.items.length) throw new Error("Cart is empty");
+
+  const totalAmount = cart.items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+
+  const order = await prisma.order.create({
+    data: {
+      userId,
+      totalAmount,
+      status: "PAID",
+      orderItems: {
+        create: cart.items.map(item => ({
+          productId: item.productId,
+          quantity: item.quantity,
+          price: item.product.price,
+        })),
+      },
+    },
+  });
+
+  return order;
+}

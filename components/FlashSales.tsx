@@ -8,6 +8,8 @@ import { useWishlist } from "@/components/WishlistContext";
 import { useCart } from "./CartContext";
 import { toast } from "sonner";
 import { useTranslation } from 'react-i18next';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 interface Product {
   id: string;
@@ -36,12 +38,35 @@ const getTimeLeft = (end: Date) => {
 };
 
 const FlashSales = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [products, setProducts] = useState<Product[]>([]);
   const [timeLeft, setTimeLeft] = useState(getTimeLeft(FLASH_SALE_END));
   const { addToCart, updateQuantity, getItemQuantity, removeFromCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const rowRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const isArabic = i18n.language === 'ar';
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+    if (sectionRef.current) {
+      gsap.fromTo(
+        sectionRef.current,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+    }
+  }, [products]);
 
   useEffect(() => {
     const FetchingProducts = async () => {
@@ -79,7 +104,7 @@ const FlashSales = () => {
   };
 
   return (
-    <section className="w-full max-w-7xl mx-auto mt-16">
+    <section ref={sectionRef} className="w-full max-w-7xl mx-auto mt-16">
       {/* Title and timer */}
       <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-8 gap-4">
         <div>
@@ -101,7 +126,6 @@ const FlashSales = () => {
                     {String(timeLeft[label]).padStart(2, '0')}
                   </span>
                 </div>
-
                 {idx < arr.length - 1 && (
                   <span className="text-red-300 text-2xl sm:text-3xl font-bold mx-1 sm:mx-2">:</span>
                 )}
@@ -109,22 +133,47 @@ const FlashSales = () => {
             ))}
           </div>
           <div className="flex gap-3">
-            <button
-              className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl"
-              onClick={() => scrollByCard('left')}
-              aria-label="Scroll left"
-            >
-            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-          </button>
-          <button
-            className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl"
-            onClick={() => scrollByCard('right')}
-            aria-label="Scroll right"
-          >
-            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-          </button>
+            {isArabic ? (
+              <>
+                <button
+                  className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl"
+                  onClick={() => scrollByCard('right')}
+                  aria-label="Scroll right"
+                >
+                  {/* Right arrow for RTL (Arabic) */}
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                </button>
+                <button
+                  className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl"
+                  onClick={() => scrollByCard('left')}
+                  aria-label="Scroll left"
+                >
+                  {/* Left arrow for RTL (Arabic) */}
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl"
+                  onClick={() => scrollByCard('left')}
+                  aria-label="Scroll left"
+                >
+                  {/* Left arrow for LTR (English) */}
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                </button>
+                <button
+                  className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl"
+                  onClick={() => scrollByCard('right')}
+                  aria-label="Scroll right"
+                >
+                  {/* Right arrow for LTR (English) */}
+                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                </button>
+              </>
+            )}
           </div>
-      </div>
+        </div>
       </div>
       {/* Product cards: always a single horizontal row with scroll, with arrow buttons */}
       <div className="relative w-full">

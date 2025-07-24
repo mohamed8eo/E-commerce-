@@ -1,9 +1,14 @@
+"use client"
+import React, { useEffect, useRef } from "react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function HomepageShowcase() {
   const { t } = useTranslation();
+  const sectionRef = useRef<HTMLDivElement>(null);
   const cards = [
     {
       title: t('playstation5'),
@@ -28,8 +33,30 @@ export default function HomepageShowcase() {
     },
   ];
 
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+    if (sectionRef.current) {
+      gsap.fromTo(
+        sectionRef.current,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+    }
+  }, [])
+
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center py-10 px-2">
+    <div ref={sectionRef} className="min-h-screen bg-white flex flex-col items-center py-10 px-2" style={{ minHeight: 400 }}>
       <main className="w-full max-w-6xl mx-auto">
         {/* Header Section */}
         <div className="mb-8">

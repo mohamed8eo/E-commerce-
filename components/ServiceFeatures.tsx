@@ -1,14 +1,38 @@
 // components/ServiceFeatures.js
 "use client";
 import '../i18n';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Truck, Headphones, DollarSign } from 'lucide-react'; // Import specific icons from lucide-react
 import { useTranslation } from 'react-i18next';
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const ServiceFeatures = () => {
   const { t } = useTranslation();
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+    if (sectionRef.current) {
+      gsap.fromTo(
+        sectionRef.current,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+    }
+  }, [])
   return (
-    <section className="bg-white py-12 px-4 sm:px-6 lg:px-8">
+    <section ref={sectionRef} className="bg-white py-12 px-4 sm:px-6 lg:px-8" style={{ minHeight: 400 }}>
       <div className="max-w-7xl mx-auto flex flex-col items-center">
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">

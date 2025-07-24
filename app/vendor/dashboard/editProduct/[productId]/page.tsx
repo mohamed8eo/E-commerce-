@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/admin/ImageUpload";
 import { Loader2Icon } from "lucide-react"
 import { useTranslation } from 'react-i18next';
-import '../../../../i18n';
+import '../../../../../i18n';
 
 const EditProduct = () => {
   const router = useRouter();

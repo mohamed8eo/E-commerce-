@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Eye } from "lucide-react";
 import { GetAllProductFromDb } from "@/action/product.action";
@@ -8,6 +8,8 @@ import { useCart } from "./CartContext";
 import Link from "next/link";
 import { useWishlist } from "@/components/WishlistContext";
 import { useTranslation } from 'react-i18next';
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 interface Product {
   id: string;
@@ -34,7 +36,9 @@ const BestSellingProducts = () => {
   const maxScroll = Math.max(products.length - CARDS_PER_VIEW, 0);
   const { addToCart, updateQuantity, getItemQuantity, removeFromCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const sectionRef = useRef<HTMLDivElement>(null);
 
+  // Fetching products from the database
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -51,6 +55,38 @@ const BestSellingProducts = () => {
     fetchProducts();
   }, []);
 
+  // Animation for the best selling products section
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!products.length) return;
+    gsap.registerPlugin(ScrollTrigger);
+    if (sectionRef.current) {
+      gsap.fromTo(
+        sectionRef.current,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+    }
+  }, [products]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (products.length) {
+      ScrollTrigger.refresh();
+    }
+  }, [products]);
+
+  if (!products.length) return null;
+
   const handleScroll = (dir: "left" | "right") => {
     setScroll((prev) => {
       if (dir === "left") return Math.max(prev - 1, 0);
@@ -59,10 +95,12 @@ const BestSellingProducts = () => {
     });
   };
 
-  if (!products.length) return null;
-
   return (
-    <section className="w-full max-w-7xl mx-auto mt-16 px-2">
+    <section
+      ref={sectionRef}
+      className="w-full max-w-7xl mx-auto mt-16 px-2"
+      style={{ minHeight: !products.length ? 600 : undefined }}
+    >
       <div className="flex items-center gap-2 mb-2">
         <span className="w-2 h-6 bg-red-400 rounded-sm inline-block"></span>
         <span className="text-red-500 font-semibold text-lg">{t('this_month')}</span>

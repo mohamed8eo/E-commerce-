@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next';
 import Link from "next/link"
 import Image from 'next/image'
 import BreadcrumbWithCustomSeparator from '@/components/BreadcrumbWithCustomSeparator';
+import React, { useRef, useEffect } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 type Card = {
   img: string;
@@ -115,18 +118,52 @@ const services: Service[] = [
 
 export default function AboutPage() {
   const { t } = useTranslation();
+  const introRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
+  const teamRef = useRef<HTMLDivElement>(null);
+  const servicesRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+    const sections = [
+      { ref: introRef, delay: 0 },
+      { ref: cardsRef, delay: 0.1 },
+      { ref: teamRef, delay: 0.2 },
+      { ref: servicesRef, delay: 0.3 },
+    ];
+    sections.forEach(({ ref, delay }) => {
+      if (ref.current) {
+        gsap.fromTo(
+          ref.current,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: ref.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
+      }
+    });
+  }, []);
+
   return (
     <>
       <div className="mt-9 ml-4 sm:ml-8">
         <BreadcrumbWithCustomSeparator />
       </div>
-      <div className="
-        flex flex-col-reverse lg:flex-row-reverse
-        items-center justify-between
-        pt-8 sm:pt-16 lg:pt-[135px]
-        px-4 sm:pl-8 lg:px-[80px]
-        gap-8 lg:gap-16 
-      ">
+      <div
+        ref={introRef}
+        style={{ opacity: 0, transform: 'translateY(50px)' }}
+        className="flex flex-col-reverse lg:flex-row-reverse items-center justify-between pt-8 sm:pt-16 lg:pt-[135px] px-4 sm:pl-8 lg:px-[80px] gap-8 lg:gap-16"
+      >
         {/* image */}
         <Image
           src="/About.png"
@@ -150,7 +187,11 @@ export default function AboutPage() {
           </div>
         </div>
       </div>
-      <div className="w-full max-w-6xl mx-auto mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div
+        ref={cardsRef}
+        style={{ opacity: 0, transform: 'translateY(50px)' }}
+        className="w-full max-w-6xl mx-auto mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+      >
         {cards.map((card: Card, idx: number) => (
           <div
             key={idx}
@@ -170,9 +211,12 @@ export default function AboutPage() {
           </div>
         ))}
       </div>
-
       {/* Team Section */}
-      <div className="max-w-6xl mx-auto py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div
+        ref={teamRef}
+        style={{ opacity: 0, transform: 'translateY(50px)' }}
+        className="max-w-6xl mx-auto py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+      >
         {team.map((member: TeamMember, idx: number) => (
           <div key={idx} className="flex flex-col items-center bg-white rounded-lg p-6 shadow">
             <Image
@@ -203,9 +247,12 @@ export default function AboutPage() {
           </div>
         ))}
       </div>
-
       {/* Services Section */}
-      <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 py-12">
+      <div
+        ref={servicesRef}
+        style={{ opacity: 0, transform: 'translateY(50px)' }}
+        className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 py-12"
+      >
         {services.map((s: Service, i: number) => (
           <div
             key={i}

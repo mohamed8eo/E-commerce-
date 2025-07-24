@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useCart } from "@/components/CartContext";
-import { ClearCart } from "@/action/product.action";
+import { CreateOrderFromCart, ClearCart } from "@/action/product.action";
 import { useRouter } from "next/navigation";
 
 export default function SuccessPage() {
@@ -10,14 +10,15 @@ export default function SuccessPage() {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    // Clear cart in DB and UI
-    ClearCart().then(() => refreshCart());
-    // Show message for 2.5 seconds, then redirect
-    const timeout = setTimeout(() => {
-      setShow(false);
-      router.push("/");
-    }, 2500);
-    return () => clearTimeout(timeout);
+    // Create order in DB, then clear cart and redirect
+    CreateOrderFromCart().then(() => {
+      ClearCart().then(() => refreshCart());
+      const timeout = setTimeout(() => {
+        setShow(false);
+        router.push("/");
+      }, 2500);
+      return () => clearTimeout(timeout);
+    });
   }, [refreshCart, router]);
 
   if (!show) return null;

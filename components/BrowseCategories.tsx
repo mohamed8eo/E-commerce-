@@ -1,14 +1,18 @@
 'use client'
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Smartphone, Monitor, Watch, Camera, Headphones, Gamepad2 } from "lucide-react";
 import { useTranslation } from 'react-i18next';
+// import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function BrowseCategories() {
   const { t } = useTranslation();
   const [scroll, setScroll] = useState(0);
   const CARD_WIDTH = 220 + 24; // card width + gap
   const CARDS_PER_VIEW = 4;
+  const sectionRef = useRef<HTMLDivElement>(null);
   const categories = [
     { name: t('phones'), icon: <Smartphone size={40} /> },
     { name: t('computers'), icon: <Monitor size={40} /> },
@@ -31,8 +35,32 @@ export default function BrowseCategories() {
     });
   };
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+    if (sectionRef.current) {
+      gsap.fromTo(
+        sectionRef.current,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom-=100',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+    }
+  }, []);
+
+
+
+
   return (
-    <section className="w-full max-w-7xl mx-auto mt-16 px-2">
+    <section ref={sectionRef} className="w-full max-w-7xl mx-auto mt-16 px-2 browse-categories" style={{ minHeight: 400 }}>
       <div className="flex items-center gap-2 mb-2">
         <span className="w-4 h-8 bg-red-400 rounded-sm inline-block"></span>
         <span className="text-red-500 font-semibold text-lg">{t('categories')}</span>

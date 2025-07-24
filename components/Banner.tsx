@@ -2,8 +2,10 @@
 import '../i18n';
 import Image from "next/image";
 import Link from "next/link";
-import React, { useCallback, useMemo, useState, useEffect } from "react";
+import React, { useCallback, useMemo, useState, useEffect, useRef } from "react";
 import { useTranslation } from 'react-i18next';
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const banners = [
   {
@@ -96,9 +98,12 @@ const Banner = () => {
 
 export default Banner;
 
+// Music Experience Section
+
 const MusicExperienceSection = () => {
   const END_TIME = useMemo(() => new Date(Date.now() + 5 * 24 * 60 * 60 * 1000 + 23 * 60 * 60 * 1000 + 59 * 60 * 1000 + 35 * 1000), []);
   const { t } = useTranslation();
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   const getTimeLeft = useCallback(() => {
     const now = new Date();
@@ -119,9 +124,29 @@ const MusicExperienceSection = () => {
     }, 1000);
     return () => clearInterval(interval);
   }, [getTimeLeft]);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+    if (sectionRef.current) {
+      gsap.fromTo(
+        sectionRef.current,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom-=100',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+    }
+  }, []);
 
   return (
-    <section className="w-full flex justify-center items-center py-12">
+    <section ref={sectionRef} className="w-full flex justify-center items-center py-12" style={{ minHeight: 400 }}>
       <div className="w-full max-w-6xl bg-black rounded-2xl flex flex-col md:flex-row items-center overflow-hidden shadow-xl relative">
         <div className="flex-1 px-8 sm:px-10 py-12 flex flex-col justify-center z-10">
           <span className="text-green-400 font-bold text-base sm:text-lg mb-4">{t('categories')}</span>

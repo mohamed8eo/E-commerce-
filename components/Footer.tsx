@@ -1,12 +1,35 @@
 "use client";
-import React from 'react'
+import React, {useEffect, useRef} from 'react'
 import Image from 'next/image'
 import { useTranslation } from 'react-i18next';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const Footer = () => {
   const { t } = useTranslation();
+  const footerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+    if (footerRef.current) {
+      gsap.fromTo(
+        footerRef.current,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: 'top bottom-=100',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+    }
+  }, []);
   return (
-    <footer className="bg-black text-white mt-8 overflow-hidden">
+    <footer ref={footerRef} className="bg-black text-white mt-8 overflow-hidden" style={{ minHeight: 400 }}>
       <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-12">
         {/* Subscribe */}
         <div>

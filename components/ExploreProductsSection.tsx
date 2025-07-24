@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Eye } from "lucide-react";
 import { GetAllProductFromDb } from "@/action/product.action";
@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { useWishlist } from "@/components/WishlistContext";
 import { useTranslation } from 'react-i18next';
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 interface Product {
   id: string;
@@ -34,6 +36,8 @@ const ExploreProductsSection = () => {
   const totalPages = Math.ceil(Math.min(products.length, MAX_PRODUCTS) / PRODUCTS_PER_PAGE);
   const { addToCart, updateQuantity, getItemQuantity, removeFromCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const sectionRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -49,6 +53,35 @@ const ExploreProductsSection = () => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+    if (sectionRef.current) {
+      gsap.fromTo(
+        sectionRef.current,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+    }
+  }, [products]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (products.length) {
+      ScrollTrigger.refresh();
+    }
+  }, [products]);
+
+
   const handleScroll = (dir: "left" | "right") => {
     setPage((prev) => {
       if (dir === "left") return Math.max(prev - 1, 0);
@@ -63,7 +96,11 @@ const ExploreProductsSection = () => {
   const visibleProducts = products.slice(startIdx, startIdx + PRODUCTS_PER_PAGE);
 
   return (
-    <section className="w-full py-16 bg-white">
+    <section
+      ref={sectionRef}
+      className="w-full py-16 bg-white"
+      style={{ minHeight: !products.length ? 600 : undefined }}
+    >
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <div className="flex items-center gap-2 mb-2">
